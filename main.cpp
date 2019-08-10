@@ -38,8 +38,11 @@ static QString presetCodes[30] = {"EnhanceHeight ", "EnhanceSoft ", "BumpHeight 
                                   "OcclusionInvert ", "OcclusionThresh ", "OcclusionContrast "
                                   "OcclusionDistance ", "OcclusionDistanceMode "};
 
-void applyPreset(QString preset, ImageProcessor *p){
+void applyPreset(QString &preset, ImageProcessor &p){
     QFile selected_preset(preset);
+    if(!selected_preset.open(QIODevice::ReadOnly)){
+        return;
+    }
     QByteArray settings = selected_preset.readAll();
     QList<QByteArray> settings_list = settings.split('\n');
 
@@ -47,65 +50,65 @@ void applyPreset(QString preset, ImageProcessor *p){
         QByteArray setting = settings_list.at(i);
         QList<QByteArray> aux = setting.split('\t');
         if (aux[0] == presetCodes[0]){
-            p->set_normal_depth(aux[1].toInt());
+            p.set_normal_depth(aux[1].toInt());
         }else if (aux[0] == presetCodes[1]){
-            p->set_normal_blur_radius(aux[1].toInt());
+            p.set_normal_blur_radius(aux[1].toInt());
         }else if (aux[0] == presetCodes[2]){
-            p->set_normal_bisel_depth(aux[1].toInt());
+            p.set_normal_bisel_depth(aux[1].toInt());
         }else if (aux[0] == presetCodes[3]){
-            p->set_normal_bisel_distance(aux[1].toInt());
+            p.set_normal_bisel_distance(aux[1].toInt());
         }else if (aux[0] == presetCodes[4]){
-            p->set_normal_bisel_blur_radius(aux[1].toInt());
+            p.set_normal_bisel_blur_radius(aux[1].toInt());
         }else if (aux[0] == presetCodes[5]){
-            p->set_normal_bisel_soft((bool)aux[1].toInt());
+            p.set_normal_bisel_soft((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[6]){
-            p->set_tileable((bool)aux[1].toInt());
+            p.set_tileable((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[7]){
-            p->set_normal_invert_x((bool)aux[1].toInt());
+            p.set_normal_invert_x((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[8]){
-            p->set_normal_invert_y((bool)aux[1].toInt());
+            p.set_normal_invert_y((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[9]){
-            p->set_parallax_type((ParallaxType)aux[1].toInt());
+            p.set_parallax_type((ParallaxType)aux[1].toInt());
         }else if (aux[0] == presetCodes[10]){
-            p->set_parallax_thresh(aux[1].toInt());
+            p.set_parallax_thresh(aux[1].toInt());
         }else if (aux[0] == presetCodes[11]){
-            p->set_parallax_focus(aux[1].toInt());
+            p.set_parallax_focus(aux[1].toInt());
         }else if (aux[0] == presetCodes[12]){
-            p->set_parallax_soft(aux[1].toInt());
+            p.set_parallax_soft(aux[1].toInt());
         }else if (aux[0] == presetCodes[13]){
-            p->set_parallax_min(aux[1].toInt());
+            p.set_parallax_min(aux[1].toInt());
         }else if (aux[0] == presetCodes[14]){
-            p->set_parallax_erode_dilate(aux[1].toInt());
+            p.set_parallax_erode_dilate(aux[1].toInt());
         }else if (aux[0] == presetCodes[15]){
-            p->set_parallax_brightness(aux[1].toInt());
+            p.set_parallax_brightness(aux[1].toInt());
         }else if (aux[0] == presetCodes[16]){
-            p->set_parallax_contrast(aux[1].toInt());
+            p.set_parallax_contrast(aux[1].toInt());
         }else if (aux[0] == presetCodes[17]){
-            p->set_parallax_invert((bool)aux[1].toInt());
+            p.set_parallax_invert((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[18]){
-            p->set_specular_blur(aux[1].toInt());
+            p.set_specular_blur(aux[1].toInt());
         }else if (aux[0] == presetCodes[19]){
-            p->set_specular_bright(aux[1].toInt());
+            p.set_specular_bright(aux[1].toInt());
         }else if (aux[0] == presetCodes[20]){
-            p->set_specular_contrast(aux[1].toInt());
+            p.set_specular_contrast(aux[1].toInt());
         }else if (aux[0] == presetCodes[21]){
-            p->set_specular_thresh(aux[1].toInt());
+            p.set_specular_thresh(aux[1].toInt());
         }else if (aux[0] == presetCodes[22]){
-            p->set_specular_invert((bool)aux[1].toInt());
+            p.set_specular_invert((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[23]){
-            p->set_occlusion_blur(aux[1].toInt());
+            p.set_occlusion_blur(aux[1].toInt());
         }else if (aux[0] == presetCodes[24]){
-            p->set_occlusion_bright(aux[1].toInt());
+            p.set_occlusion_bright(aux[1].toInt());
         }else if (aux[0] == presetCodes[25]){
-            p->set_occlusion_invert((bool)aux[1].toInt());
+            p.set_occlusion_invert((bool)aux[1].toInt());
         }else if (aux[0] == presetCodes[26]){
-            p->set_occlusion_thresh(aux[1].toInt());
+            p.set_occlusion_thresh(aux[1].toInt());
         }else if (aux[0] == presetCodes[27]){
-            p->set_occlusion_contrast(aux[1].toInt());
+            p.set_occlusion_contrast(aux[1].toInt());
         }else if (aux[0] == presetCodes[28]){
-            p->set_occlusion_distance(aux[1].toInt());
+            p.set_occlusion_distance(aux[1].toInt());
         }else if (aux[0] == presetCodes[29]){
-            p->set_occlusion_distance_mode((bool)aux[1].toInt());
+            p.set_occlusion_distance_mode((bool)aux[1].toInt());
         }
     }
 }
@@ -181,7 +184,7 @@ int main(int argc, char *argv[])
         ImageProcessor *processor = new ImageProcessor();
         processor->loadImage(inputDiffuseTextureOptionValue , auximage);
         if(!pressetOptionValue.trimmed().isEmpty()){
-            applyPreset(pressetOptionValue, processor);
+            applyPreset(pressetOptionValue, *processor);
         }
         QImage normal;
         normal = processor->get_normal();
