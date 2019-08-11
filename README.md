@@ -33,7 +33,7 @@ If you wan't to contribute by coding, please contact me and we will see how can 
 
 ## Compiling on Windows
 
-Compiling on linux is pretty straightforward, just user your package manager to install qt-creator, libopencv and thats it, you can open the .pro file with qtcreator and build or debug laigter. For windows, unfortunately, there are more steps to be done.
+Compiling on linux is pretty straightforward, just use your package manager to install qtcreator, libopencv-dev and thats it, you can open the .pro file with qtcreator and build or debug laigter. For windows, unfortunately, there are more steps to be done.
 
 First you will need to install qt. I strongly discourage the offline installer, use the web installer instead. In the components selection window you will need to select  qt creator under "qt >> developer and designers tools" and the mingw 7.3 32bit toolchain under "qt >> developer and designers tools >> mingw 7.3.0 32bit" and "qt >> qt 5.13.0 >> mingw 7.3.0 32bit". Do not choose the 64 bit version or chose the msvc toolchain or any other thing.
 

@@ -149,43 +149,79 @@ int main(int argc, char *argv[])
     argsParser.addHelpOption();
     argsParser.addVersionOption();
 
-    QCommandLineOption softOpenGl(QStringList() << "s" << "software-opengl", QCoreApplication::translate("softOpenGl", "Use software opengl renderer."));
+    QCommandLineOption softOpenGl(QStringList() << "s" << "software-opengl",
+        "Use software opengl renderer.");
     argsParser.addOption(softOpenGl);
+
+    QCommandLineOption noGuiOption(QStringList() << "g" << "no-gui",
+        "do not start graphical interface");
+    argsParser.addOption(noGuiOption);
 
     QCommandLineOption inputDiffuseTextureOption(QStringList() << "d" << "diffuse",
         "diffuse texture to load",
-        "diffuse");
+        "diffuse texture path");
     argsParser.addOption(inputDiffuseTextureOption);
 
-    QCommandLineOption pressetOption(QStringList() << "p" << "preset",
+    QCommandLineOption outputNormalTextureOption(QStringList() << "n" << "normal",
+        "generate normals");
+    argsParser.addOption(outputNormalTextureOption);
+
+    QCommandLineOption outputSpecularTextureOption(QStringList() << "c" << "specular",
+        "generate specular");
+    argsParser.addOption(outputSpecularTextureOption);
+
+    QCommandLineOption outputOcclusionTextureOption(QStringList() << "o" << "occlusion",
+        "generate occlusion");
+    argsParser.addOption(outputOcclusionTextureOption);
+
+    QCommandLineOption outputParallaxTextureOption(QStringList() << "p" << "parallax",
+        "generate parallax");
+    argsParser.addOption(outputParallaxTextureOption);
+
+    QCommandLineOption pressetOption(QStringList() << "r" << "preset",
         "presset to load",
-        "preset");
+        "preset file path");
     argsParser.addOption(pressetOption);
 
     QScopedPointer<QCoreApplication> app(createApplication(argc, argv));
     argsParser.process(*app.data());
 
     QString inputDiffuseTextureOptionValue = argsParser.value(inputDiffuseTextureOption);
-    QString pressetOptionValue = argsParser.value(pressetOption);
     if(!inputDiffuseTextureOptionValue.trimmed().isEmpty()){
-        qDebug() << inputDiffuseTextureOptionValue;
-        qDebug() << pressetOptionValue;
+        QFileInfo info(inputDiffuseTextureOptionValue);
+        QString suffix = info.suffix(); // just the last suffix, not the complete one
+
+        QString pressetOptionValue = argsParser.value(pressetOption);
         ImageLoader il;
         bool succes;
-        QImage auximage;
-        auximage = il.loadImage(inputDiffuseTextureOptionValue , &succes);
+        QImage auximage = il.loadImage(inputDiffuseTextureOptionValue , &succes);
         auximage = auximage.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
         ImageProcessor *processor = new ImageProcessor();
         processor->loadImage(inputDiffuseTextureOptionValue , auximage);
         if(!pressetOptionValue.trimmed().isEmpty()){
             applyPresets(pressetOptionValue, *processor);
         }
-        QImage normal;
-        normal = processor->get_normal();
-        QString name;
-        name = inputDiffuseTextureOptionValue.append(".out.png");
-        normal.save(name);
-        return 0;
+        QString pathWithoutExtension = info.absoluteFilePath().remove("."+suffix);
+        if(argsParser.isSet(outputNormalTextureOption)){
+            QImage normal = processor->get_normal();
+            QString name = pathWithoutExtension+"_n."+suffix;
+            normal.save(name);
+        }
+        if(argsParser.isSet(outputSpecularTextureOption)){
+            QImage specular = processor->get_specular();
+            QString name = pathWithoutExtension+"_s."+suffix;
+            specular.save(name);
+        }
+        if(argsParser.isSet(outputOcclusionTextureOption)){
+            QImage occlusion = processor->get_occlusion();
+            QString name = pathWithoutExtension+"_o."+suffix;
+            occlusion.save(name);
+        }
+        if(argsParser.isSet(outputParallaxTextureOption)){
+            QImage parallax = processor->get_parallax();
+            QString name = pathWithoutExtension+"_p."+suffix;
+            parallax.save(name);
+        }
     }
 
     QApplication* a = qobject_cast<QApplication *>(app.data());
@@ -203,8 +239,8 @@ int main(int argc, char *argv[])
         qRegisterMetaType<ProcessedImage>("ProcessedImage");
         returnCode = app->exec();
     } else {
-        // do CLI only things
-        returnCode = app->exec();
+        // do CLI only things here
+        returnCode = 0;
     }
     return returnCode;
 }

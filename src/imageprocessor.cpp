@@ -754,8 +754,23 @@ Mat ImageProcessor::calculate_normal(Mat mat, int depth, int blur_radius){
                 continue;
             }
 
-            dx = -aux.at<float>(y,(x-1)%aux.cols) + aux.at<float>(y,(x+1)%aux.cols);
-            dy = -aux.at<float>((y-1)%aux.rows,x) + aux.at<float>((y+1)%aux.rows,x);
+            int xLeft = (x-1)%aux.cols;
+            if(xLeft < 0)
+                xLeft = 0;;
+            int xRight = (x+1)%aux.cols;
+            if(xRight >= aux.cols)
+                xRight = aux.cols-1;
+
+            int yDown = (y-1)%aux.rows;
+            if(yDown < 0)
+                yDown = 0;
+            int yUp = (y+1)%aux.rows;
+            if(yUp >= aux.rows)
+                yUp = aux.rows-1;
+
+            // the original code was giving me segmentation faults when trying to acess indexes outside the matrix bounds
+            dx = -aux.at<float>(y,xLeft) + aux.at<float>(y,xRight);
+            dy = -aux.at<float>(yDown,x) + aux.at<float>(yUp,x);
 
 
             Vec3f n = Vec3f(-dx*(depth/1000.0)*normalInvertX,
