@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
         QImage normal;
         normal = processor->get_normal();
         QString name;
-        name = inputDiffuseTextureOptionValue .append(".out.png");
+        name = inputDiffuseTextureOptionValue.append(".out.png");
         normal.save(name);
         return 0;
     }

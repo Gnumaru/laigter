@@ -29,3 +29,25 @@ If you wan't to contribute by coding, please contact me and we will see how can 
 ![captura-piedra-5](https://user-images.githubusercontent.com/46932830/60845822-dcf87880-a1b3-11e9-879c-e909fbd83469.png)
 ![captura-piedras-9](https://user-images.githubusercontent.com/46932830/60845823-dcf87880-a1b3-11e9-8772-a42180f3abdc.png)
 ![specular4](https://user-images.githubusercontent.com/46932830/60845825-dcf87880-a1b3-11e9-9f32-45ccc27abe0f.png)
+
+
+## Compiling on Windows
+
+Compiling on linux is pretty straightforward, just user your package manager to install qt-creator, libopencv and thats it, you can open the .pro file with qtcreator and build or debug laigter. For windows, unfortunately, there are more steps to be done.
+
+First you will need to install qt. I strongly discourage the offline installer, use the web installer instead. In the components selection window you will need to select  qt creator under "qt >> developer and designers tools" and the mingw 7.3 32bit toolchain under "qt >> developer and designers tools >> mingw 7.3.0 32bit" and "qt >> qt 5.13.0 >> mingw 7.3.0 32bit". Do not choose the 64 bit version or chose the msvc toolchain or any other thing.
+
+Then you will need to download and compile opencv 3.2. It must be version 3.2, it cannot be any other version. be warned. But to compile opencv you will need cmake, so download and install that too.
+
+Once you have installed cmake and downloaded opencv 3.2, folow this tutorial here:
+
+https://wiki.qt.io/How_to_setup_Qt_and_openCV_on_Windows
+
+But before clicking "generate" on cmake-gui, be sure to uncheck BUILD_opencv_python3 in case you have this flag and it is checked. I could not compile until I unchecked this. And also change EXECUTABLE_OUTPUT_PATH to C:\opencv-build\install\x86\mingw\bin wich is the path set on laigter.pro (or you could change the path on your laigter.pro to match your EXECUTABLE_OUTPUT_PATH)
+
+After several minutes, fortunately your compilation will be sucessfull. If that's the case, you can open the project on qt-creator, compile and run it. Once you want to deploy the application for windows, you will need the windeployqt command. Something like the following should be enough:
+
+```
+windeployqt --dir .\deploy ..\build-laigter-Desktop_Qt_5_13_0_MinGW_32_bit-Release\release\laigter.exe
+copy /Y ..\build-laigter-Desktop_Qt_5_13_0_MinGW_32_bit-Release\release\laigter.exe .\deploy\laigter.exe
+```
