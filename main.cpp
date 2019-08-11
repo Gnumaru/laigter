@@ -26,19 +26,10 @@
 #include <QDebug>
 #include <QDir>
 #include <QCommandLineParser>
-
-static QString presetCodes[30] = {"EnhanceHeight ", "EnhanceSoft ", "BumpHeight ",
-                                  "BumpDistance", "BumpSoft ", "BumpCut ", "Tile ", "InvertX ",
-                                  "InvertY ", "ParallaxType", "BinaryThreshold ",
-                                  "BinaryFocus ", "ParallaxSoft ", "BinaryMinHeight ",
-                                  "BinaryErodeDilate ", "HeightMapBrightness ",
-                                  "HeightMapContrast ", "InvertParallax ", "SpecularBlur ",
-                                  "SpecularBright ", "SpecularContrast ", "SpecularThresh ",
-                                  "SpecularInvert ", "OcclusionBlur ", "OcclusionBright ",
-                                  "OcclusionInvert ", "OcclusionThresh ", "OcclusionContrast "
-                                  "OcclusionDistance ", "OcclusionDistanceMode "};
+#include "gui/presetsmanager.h"
 
 void applyPreset(QString &preset, ImageProcessor &p){
+    Ui::preset_codes_array& presetCodes = PresetsManager::get_preset_codes();
     QFile selected_preset(preset);
     if(!selected_preset.open(QIODevice::ReadOnly)){
         return;
