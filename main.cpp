@@ -28,8 +28,73 @@
 #include <QCommandLineParser>
 #include "gui/presetsmanager.h"
 
-void applyPreset(QString &preset, ImageProcessor &p){
+void applyPresetSettings(QByteArray& setting, ImageProcessor &p){
     Ui::preset_codes_array& presetCodes = PresetsManager::get_preset_codes();
+    QList<QByteArray> aux = setting.split('\t');
+    if (aux[0] == presetCodes[0]){
+        p.set_normal_depth(aux[1].toInt());
+    }else if (aux[0] == presetCodes[1]){
+        p.set_normal_blur_radius(aux[1].toInt());
+    }else if (aux[0] == presetCodes[2]){
+        p.set_normal_bisel_depth(aux[1].toInt());
+    }else if (aux[0] == presetCodes[3]){
+        p.set_normal_bisel_distance(aux[1].toInt());
+    }else if (aux[0] == presetCodes[4]){
+        p.set_normal_bisel_blur_radius(aux[1].toInt());
+    }else if (aux[0] == presetCodes[5]){
+        p.set_normal_bisel_soft((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[6]){
+        p.set_tileable((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[7]){
+        p.set_normal_invert_x((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[8]){
+        p.set_normal_invert_y((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[9]){
+        p.set_parallax_type((ParallaxType)aux[1].toInt());
+    }else if (aux[0] == presetCodes[10]){
+        p.set_parallax_thresh(aux[1].toInt());
+    }else if (aux[0] == presetCodes[11]){
+        p.set_parallax_focus(aux[1].toInt());
+    }else if (aux[0] == presetCodes[12]){
+        p.set_parallax_soft(aux[1].toInt());
+    }else if (aux[0] == presetCodes[13]){
+        p.set_parallax_min(aux[1].toInt());
+    }else if (aux[0] == presetCodes[14]){
+        p.set_parallax_erode_dilate(aux[1].toInt());
+    }else if (aux[0] == presetCodes[15]){
+        p.set_parallax_brightness(aux[1].toInt());
+    }else if (aux[0] == presetCodes[16]){
+        p.set_parallax_contrast(aux[1].toInt());
+    }else if (aux[0] == presetCodes[17]){
+        p.set_parallax_invert((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[18]){
+        p.set_specular_blur(aux[1].toInt());
+    }else if (aux[0] == presetCodes[19]){
+        p.set_specular_bright(aux[1].toInt());
+    }else if (aux[0] == presetCodes[20]){
+        p.set_specular_contrast(aux[1].toInt());
+    }else if (aux[0] == presetCodes[21]){
+        p.set_specular_thresh(aux[1].toInt());
+    }else if (aux[0] == presetCodes[22]){
+        p.set_specular_invert((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[23]){
+        p.set_occlusion_blur(aux[1].toInt());
+    }else if (aux[0] == presetCodes[24]){
+        p.set_occlusion_bright(aux[1].toInt());
+    }else if (aux[0] == presetCodes[25]){
+        p.set_occlusion_invert((bool)aux[1].toInt());
+    }else if (aux[0] == presetCodes[26]){
+        p.set_occlusion_thresh(aux[1].toInt());
+    }else if (aux[0] == presetCodes[27]){
+        p.set_occlusion_contrast(aux[1].toInt());
+    }else if (aux[0] == presetCodes[28]){
+        p.set_occlusion_distance(aux[1].toInt());
+    }else if (aux[0] == presetCodes[29]){
+        p.set_occlusion_distance_mode((bool)aux[1].toInt());
+    }
+}
+
+void applyPresets(QString &preset, ImageProcessor &p){
     QFile selected_preset(preset);
     if(!selected_preset.open(QIODevice::ReadOnly)){
         return;
@@ -39,74 +104,22 @@ void applyPreset(QString &preset, ImageProcessor &p){
 
     for (int i=0; i< settings_list.count(); i++){
         QByteArray setting = settings_list.at(i);
-        QList<QByteArray> aux = setting.split('\t');
-        if (aux[0] == presetCodes[0]){
-            p.set_normal_depth(aux[1].toInt());
-        }else if (aux[0] == presetCodes[1]){
-            p.set_normal_blur_radius(aux[1].toInt());
-        }else if (aux[0] == presetCodes[2]){
-            p.set_normal_bisel_depth(aux[1].toInt());
-        }else if (aux[0] == presetCodes[3]){
-            p.set_normal_bisel_distance(aux[1].toInt());
-        }else if (aux[0] == presetCodes[4]){
-            p.set_normal_bisel_blur_radius(aux[1].toInt());
-        }else if (aux[0] == presetCodes[5]){
-            p.set_normal_bisel_soft((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[6]){
-            p.set_tileable((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[7]){
-            p.set_normal_invert_x((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[8]){
-            p.set_normal_invert_y((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[9]){
-            p.set_parallax_type((ParallaxType)aux[1].toInt());
-        }else if (aux[0] == presetCodes[10]){
-            p.set_parallax_thresh(aux[1].toInt());
-        }else if (aux[0] == presetCodes[11]){
-            p.set_parallax_focus(aux[1].toInt());
-        }else if (aux[0] == presetCodes[12]){
-            p.set_parallax_soft(aux[1].toInt());
-        }else if (aux[0] == presetCodes[13]){
-            p.set_parallax_min(aux[1].toInt());
-        }else if (aux[0] == presetCodes[14]){
-            p.set_parallax_erode_dilate(aux[1].toInt());
-        }else if (aux[0] == presetCodes[15]){
-            p.set_parallax_brightness(aux[1].toInt());
-        }else if (aux[0] == presetCodes[16]){
-            p.set_parallax_contrast(aux[1].toInt());
-        }else if (aux[0] == presetCodes[17]){
-            p.set_parallax_invert((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[18]){
-            p.set_specular_blur(aux[1].toInt());
-        }else if (aux[0] == presetCodes[19]){
-            p.set_specular_bright(aux[1].toInt());
-        }else if (aux[0] == presetCodes[20]){
-            p.set_specular_contrast(aux[1].toInt());
-        }else if (aux[0] == presetCodes[21]){
-            p.set_specular_thresh(aux[1].toInt());
-        }else if (aux[0] == presetCodes[22]){
-            p.set_specular_invert((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[23]){
-            p.set_occlusion_blur(aux[1].toInt());
-        }else if (aux[0] == presetCodes[24]){
-            p.set_occlusion_bright(aux[1].toInt());
-        }else if (aux[0] == presetCodes[25]){
-            p.set_occlusion_invert((bool)aux[1].toInt());
-        }else if (aux[0] == presetCodes[26]){
-            p.set_occlusion_thresh(aux[1].toInt());
-        }else if (aux[0] == presetCodes[27]){
-            p.set_occlusion_contrast(aux[1].toInt());
-        }else if (aux[0] == presetCodes[28]){
-            p.set_occlusion_distance(aux[1].toInt());
-        }else if (aux[0] == presetCodes[29]){
-            p.set_occlusion_distance_mode((bool)aux[1].toInt());
-        }
+        applyPresetSettings(setting, p);
     }
+}
+
+QCoreApplication* createApplication(int &argc, char *argv[])
+{
+    for (int i = 1; i < argc; ++i)
+        if (!qstrcmp(argv[i], "--no-gui"))
+            return new QCoreApplication(argc, argv);
+    return new QApplication(argc, argv);
 }
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setApplicationName("laigter");
+    QCoreApplication::setApplicationName("laigter gnumaru");
+    QCoreApplication::setApplicationVersion("1.5.0.0");
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
@@ -131,13 +144,6 @@ int main(int argc, char *argv[])
         dir.mkpath(".");
 #endif
 
-    //QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName("laigter gnumaru");
-    QCoreApplication::setApplicationVersion("1.5.0.0");
-
-    QApplication a(argc, argv);
-
-
     QCommandLineParser argsParser;
     argsParser.setApplicationDescription("Test helper");
     argsParser.addHelpOption();
@@ -145,9 +151,6 @@ int main(int argc, char *argv[])
 
     QCommandLineOption softOpenGl(QStringList() << "s" << "software-opengl", QCoreApplication::translate("softOpenGl", "Use software opengl renderer."));
     argsParser.addOption(softOpenGl);
-
-//    QCommandLineOption version(QStringList() << "v" << "version" ,"show version and exit");
-//    argsParser.addOption(version);
 
     QCommandLineOption inputDiffuseTextureOption(QStringList() << "d" << "diffuse",
         "diffuse texture to load",
@@ -159,7 +162,8 @@ int main(int argc, char *argv[])
         "preset");
     argsParser.addOption(pressetOption);
 
-    argsParser.process(a);
+    QScopedPointer<QCoreApplication> app(createApplication(argc, argv));
+    argsParser.process(*app.data());
 
     QString inputDiffuseTextureOptionValue = argsParser.value(inputDiffuseTextureOption);
     QString pressetOptionValue = argsParser.value(pressetOption);
@@ -168,14 +172,13 @@ int main(int argc, char *argv[])
         qDebug() << pressetOptionValue;
         ImageLoader il;
         bool succes;
-        //QString fileName;
         QImage auximage;
         auximage = il.loadImage(inputDiffuseTextureOptionValue , &succes);
         auximage = auximage.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
         ImageProcessor *processor = new ImageProcessor();
         processor->loadImage(inputDiffuseTextureOptionValue , auximage);
         if(!pressetOptionValue.trimmed().isEmpty()){
-            applyPreset(pressetOptionValue, *processor);
+            applyPresets(pressetOptionValue, *processor);
         }
         QImage normal;
         normal = processor->get_normal();
@@ -185,17 +188,23 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-
-    a.installTranslator(&translator);
-    if (argc > 1){
-        if (*argv[1] == 's'){
-            a.setAttribute(Qt::AA_UseSoftwareOpenGL);
+    QApplication* a = qobject_cast<QApplication *>(app.data());
+    int returnCode;
+    if (a) {
+        a->installTranslator(&translator);
+        bool softOpenGlValue = argsParser.isSet(softOpenGl);
+        if (softOpenGlValue){
+            a->setAttribute(Qt::AA_UseSoftwareOpenGL);
             qDebug() << "Soft OpenGL";
         }
+        MainWindow w;
+        QGuiApplication::setWindowIcon(QIcon(":/images/laigter-icon.png"));
+        w.show();
+        qRegisterMetaType<ProcessedImage>("ProcessedImage");
+        returnCode = app->exec();
+    } else {
+        // do CLI only things
+        returnCode = app->exec();
     }
-    MainWindow w;
-    QGuiApplication::setWindowIcon(QIcon(":/images/laigter-icon.png"));
-    w.show();
-    qRegisterMetaType<ProcessedImage>("ProcessedImage");
-    return a.exec();
+    return returnCode;
 }
